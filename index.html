@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f7f4">
+    <title>Dookie Diary</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="scripts/main.js" defer></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Dookie Diary home">
+          <img class="brand-doodle" src="assets/images/fly-doodle.jpg" alt="" aria-hidden="true">
+          <span>Dookie Diary</span>
+        </a>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">YOUR PERSONAL GUT JOURNAL</p>
+          
+          <p class="intro-copy">Don't hold it in, log it!</p>
+        </div>
+      </section>
+
+      <nav class="tabs" role="tablist" aria-label="Diary sections">
+        <button class="tab-button is-active" id="calendar-tab" type="button" role="tab" aria-selected="true" aria-controls="calendar-panel" tabindex="0">Poo Calendar</button>
+        <button class="tab-button" id="toilet-tourist-tab" type="button" role="tab" aria-selected="false" aria-controls="toilet-tourist-panel" tabindex="-1">Toilet Tourist</button>
+      </nav>
+
+      <section class="tab-panel" id="calendar-panel" role="tabpanel" aria-labelledby="calendar-tab">
+        <section class="stats-grid" aria-label="Your recent activity">
+          <article class="stat-card">
+            <div class="stat-icon icon-peach" aria-hidden="true">◷</div>
+            <div><p class="stat-label">LAST LOGGED</p><p class="stat-value" id="last-logged">—</p></div>
+            <span class="stat-caption" id="last-caption">Your latest entry</span>
+          </article>
+          <article class="stat-card">
+            <div class="stat-icon icon-sage" aria-hidden="true">↗</div>
+            <div><p class="stat-label">THIS WEEK</p><p class="stat-value"><span id="week-count">0</span><span class="stat-unit" id="week-unit"> logs</span></p></div>
+            <span class="stat-caption">A simple weekly snapshot</span>
+          </article>
+          <article class="stat-card">
+            <div class="stat-icon icon-lilac" aria-hidden="true">⌁</div>
+            <div><p class="stat-label">YOUR RHYTHM</p><p class="stat-value" id="rhythm">Getting started</p></div>
+            <span class="stat-caption" id="rhythm-caption">Averages appear over time</span>
+          </article>
+        </section>
+
+        <section class="calendar-card" aria-label="Poop calendar">
+          <div class="calendar-main">
+            <div class="calendar-heading">
+              <div>
+                <p class="eyebrow">YOUR HISTORY</p>
+                <h2 id="month-title" aria-live="polite"></h2>
+              </div>
+              <div class="calendar-controls">
+                <button class="today-button" id="today-button" type="button">Today</button>
+                <button class="icon-button" id="previous-month" type="button" aria-label="Previous month"><span aria-hidden="true">←</span></button>
+                <button class="icon-button" id="next-month" type="button" aria-label="Next month"><span aria-hidden="true">→</span></button>
+              </div>
+            </div>
+            <div class="calendar-grid" role="grid" aria-label="Calendar">
+              <div class="weekday" role="columnheader">Sun</div>
+              <div class="weekday" role="columnheader">Mon</div>
+              <div class="weekday" role="columnheader">Tue</div>
+              <div class="weekday" role="columnheader">Wed</div>
+              <div class="weekday" role="columnheader">Thu</div>
+              <div class="weekday" role="columnheader">Fri</div>
+              <div class="weekday" role="columnheader">Sat</div>
+              <div class="days-grid" id="calendar-days" role="rowgroup"></div>
+            </div>
+            <div class="calendar-legend">
+              <span><img class="logged-marker legend-toilet" src="assets/images/toilet-doodle.jpg" alt="" aria-hidden="true">Logged</span>
+              <span><i class="legend-dot today-dot"></i>Today</span>
+              <span class="legend-hint">Select a day to add or view a log</span>
+            </div>
+          </div>
+          <aside class="day-panel" aria-labelledby="selected-date">
+            <div class="day-panel-top">
+              <div>
+                <p class="eyebrow">YOUR DAY</p>
+                <h3 id="selected-date"></h3>
+              </div>
+              <span class="day-count" id="selected-count">0 logs</span>
+            </div>
+            <div class="day-entries" id="day-entries"></div>
+            <button class="add-log-button" id="add-log-button" type="button"><span aria-hidden="true">＋</span> Add a log</button>
+            <p class="gentle-reminder">Every body has its own rhythm. This is just a space to notice yours.</p>
+          </aside>
+        </section>
+      </section>
+
+      <section class="tab-panel tourist-panel" id="toilet-tourist-panel" role="tabpanel" aria-labelledby="toilet-tourist-tab" hidden>
+        <div class="tourist-heading">
+          <div>
+            <p class="eyebrow">A LITTLE SIDE QUEST</p>
+            <h2>Toilet Tourist</h2>
+            <p class="tourist-description">Keep a record of bathrooms you visit away from home.</p>
+          </div>
+          <button class="add-log-button tourist-add-button" id="add-tourist-log" type="button"><span aria-hidden="true">＋</span> Add a visit</button>
+        </div>
+        <div class="tourist-list" id="tourist-list" aria-live="polite"></div>
+      </section>
+
+      <footer class="page-footer">
+        <span>Made for noticing, not judging <span aria-hidden="true">♡</span></span>
+        <span>Your entries are saved only on this device.</span>
+      </footer>
+    </main>
+
+    <dialog class="log-dialog" id="log-dialog" aria-labelledby="dialog-title">
+      <form id="log-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">A QUICK CHECK-IN</p>
+            <h2 id="dialog-title">Add a little note</h2>
+          </div>
+          <button class="dialog-close" id="dialog-close" type="button" aria-label="Close">×</button>
+        </div>
+        <p class="dialog-date" id="dialog-date"></p>
+        <label class="field-label" for="log-time">Around what time?</label>
+        <input id="log-time" name="time" type="time" required>
+        <label class="field-label" for="log-note">Anything you want to remember? <span class="optional">(optional)</span></label>
+        <textarea id="log-note" name="note" rows="3" maxlength="240" placeholder="Keep it simple, or leave this blank."></textarea>
+        <fieldset class="stool-gallery">
+          <legend class="field-label">Choose a stool type <span class="optional">(optional)</span></legend>
+          <div class="stool-options">
+            <label class="stool-option">
+              <input type="radio" name="stool-type" value="type-1">
+              <span class="stool-option-card">
+                <img src="assets/images/stool-type-1.jpg" alt="" loading="lazy">
+                <span class="stool-option-copy">
+                  <span class="stool-option-title">Type 1</span>
+                  <span class="stool-option-description">Separate hard lumps, like Nerds Gummy Clusters (hard to pass)</span>
+                </span>
+              </span>
+            </label>
+            <label class="stool-option">
+              <input type="radio" name="stool-type" value="type-2">
+              <span class="stool-option-card">
+                <img src="assets/images/stool-type-2.jpg" alt="" loading="lazy">
+                <span class="stool-option-copy">
+                  <span class="stool-option-title">Type 2</span>
+                  <span class="stool-option-description">Sausage-shaped, but lumpy and has texture</span>
+                </span>
+              </span>
+            </label>
+            <label class="stool-option">
+              <input type="radio" name="stool-type" value="type-3">
+              <span class="stool-option-card">
+                <img src="assets/images/stool-type-3.jpg" alt="" loading="lazy">
+                <span class="stool-option-copy">
+                  <span class="stool-option-title">Type 3</span>
+                  <span class="stool-option-description">Like a sausage but with cracks on the surface</span>
+                </span>
+              </span>
+            </label>
+            <label class="stool-option">
+              <input type="radio" name="stool-type" value="type-4">
+              <span class="stool-option-card">
+                <img src="assets/images/stool-type-4.jpg" alt="" loading="lazy">
+                <span class="stool-option-copy">
+                  <span class="stool-option-title">Type 4</span>
+                  <span class="stool-option-description">Like a sausage or snake, so soft and smooth. Best kind of stool</span>
+                </span>
+              </span>
+            </label>
+            <label class="stool-option">
+              <input type="radio" name="stool-type" value="type-5">
+              <span class="stool-option-card">
+                <img src="assets/images/stool-type-5.jpg" alt="" loading="lazy">
+                <span class="stool-option-copy">
+                  <span class="stool-option-title">Type 5</span>
+                  <span class="stool-option-description">Soft blobs with clear cut edges</span>
+                </span>
+              </span>
+            </label>
+            <label class="stool-option">
+              <input type="radio" name="stool-type" value="type-6">
+              <span class="stool-option-card">
+                <img src="assets/images/stool-type-6.jpg" alt="" loading="lazy">
+                <span class="stool-option-copy">
+                  <span class="stool-option-title">Type 6</span>
+                  <span class="stool-option-description">Entering diarrhea village</span>
+                </span>
+              </span>
+            </label>
+            <label class="stool-option">
+              <input type="radio" name="stool-type" value="type-7">
+              <span class="stool-option-card">
+                <img src="assets/images/stool-type-7.jpg" alt="" loading="lazy">
+                <span class="stool-option-copy">
+                  <span class="stool-option-title">Type 7</span>
+                  <span class="stool-option-description">Just straight water, I’m so sorry</span>
+                </span>
+              </span>
+            </label>
+            <label class="stool-option stool-option-none">
+              <input type="radio" name="stool-type" value="none">
+              <span class="stool-option-card">Skip type</span>
+            </label>
+          </div>
+        </fieldset>
+        <div class="dialog-actions">
+          <button class="cancel-button" id="cancel-log" type="button">Cancel</button>
+          <button class="save-button" type="submit">Save log</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog class="log-dialog tourist-dialog" id="tourist-dialog" aria-labelledby="tourist-dialog-title">
+      <form id="tourist-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">TOILET TOURIST</p>
+            <h2 id="tourist-dialog-title">Log a bathroom visit</h2>
+          </div>
+          <button class="dialog-close" id="tourist-dialog-close" type="button" aria-label="Close">×</button>
+        </div>
+        <p class="dialog-date">A manual travel note—no location tracking.</p>
+        <label class="field-label" for="tourist-date">When did you visit?</label>
+        <input id="tourist-date" name="date" type="date" required>
+        <label class="field-label" for="tourist-location">Where was the bathroom?</label>
+        <input id="tourist-location" name="location" type="text" maxlength="100" placeholder="A cafe, park, friend's house..." required>
+        <label class="field-label" for="tourist-note">Add a detail <span class="optional">(optional)</span></label>
+        <textarea id="tourist-note" name="note" rows="3" maxlength="240" placeholder="Anything you want to remember?"></textarea>
+        <div class="dialog-actions">
+          <button class="cancel-button" id="tourist-cancel" type="button">Cancel</button>
+          <button class="save-button" type="submit">Save visit</button>
+        </div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
