@@ -24,7 +24,64 @@ const touristForm = document.getElementById('tourist-form');
 const touristDate = document.getElementById('tourist-date');
 const touristLocation = document.getElementById('tourist-location');
 const touristNote = document.getElementById('tourist-note');
+const touristRatingHelp = document.getElementById('tourist-rating-help');
+const touristCategoryRatings = document.getElementById('tourist-category-ratings');
 const touristList = document.getElementById('tourist-list');
+const touristRatingCategories = [
+  { key: 'ambience', label: 'Ambience' },
+  { key: 'cleanliness', label: 'Cleanliness' },
+  { key: 'smell', label: 'Pre-poo smell' },
+  { key: 'reverb', label: 'Reverb' },
+  { key: 'toiletPaper', label: 'Toilet paper quality' },
+  { key: 'noTouch', label: 'No-touch access' },
+  { key: 'amenities', label: 'Amenities' }
+];
+const touristRatingLabels = {
+  1: 'Pretty rough',
+  2: 'Not great',
+  3: 'Okay',
+  4: 'Good',
+  5: 'Excellent'
+};
+function buildTouristRatingControls() {
+  for (const category of touristRatingCategories) {
+    const row = document.createElement('div');
+    row.className = 'tourist-rating-row';
+    const label = document.createElement('label');
+    label.className = 'tourist-rating-label';
+    label.textContent = category.label;
+    label.setAttribute('for', `tourist-${category.key}`);
+
+    const control = document.createElement('div');
+    control.className = 'tourist-rating-control';
+
+    for (let value = 1; value <= 5; value += 1) {
+      const option = document.createElement('label');
+      option.className = 'tourist-rating-option';
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = `tourist-${category.key}`;
+      input.value = String(value);
+      input.setAttribute('aria-label', `${category.label} ${value} out of 5 flys`);
+      input.dataset.category = category.key;
+      if (value === 3) input.checked = true;
+      const fly = document.createElement('img');
+      fly.src = 'assets/images/fly-doodle.jpg';
+      fly.alt = '';
+      fly.setAttribute('aria-hidden', 'true');
+      option.append(input, fly);
+      control.append(option);
+    }
+
+    row.append(label, control);
+    touristCategoryRatings.append(row);
+  }
+
+  touristCategoryRatings.querySelectorAll('input[type="radio"]').forEach((input) => {
+    input.addEventListener('change', updateTouristRatingHelp);
+  });
+}
+buildTouristRatingControls();
 const stoolTypes = new Map([
   ['type-1', {
     label: 'Type 1 — Separate hard lumps, like Nerds Gummy Clusters (hard to pass)',
@@ -122,6 +179,37 @@ function saveEntries() {
   }
 }
 
+function getTouristRatingFromValue(value) {
+  const parsed = Number(value ?? 3);
+  return Number.isInteger(parsed) && parsed >= 1 && parsed <= 5 ? parsed : 3;
+}
+
+function getTouristAverageRating(ratings) {
+  const categoryRatings = touristRatingCategories
+    .map((category) => getTouristRatingFromValue(ratings?.[category.key] ?? 3));
+  const total = categoryRatings.reduce((sum, rating) => sum + rating, 0);
+  return Number((total / categoryRatings.length).toFixed(1));
+}
+
+function getTouristAverageLabel(value) {
+  if (value >= 4.5) return 'Excellent';
+  if (value >= 3.5) return 'Good';
+  if (value >= 2.5) return 'Okay';
+  if (value >= 1.5) return 'Needs work';
+  return 'Pretty rough';
+}
+
+function updateTouristRatingHelp() {
+  const ratings = {};
+  for (const category of touristRatingCategories) {
+    const checkedInput = touristForm.querySelector(`input[name="tourist-${category.key}"]:checked`);
+    ratings[category.key] = getTouristRatingFromValue(checkedInput?.value ?? 3);
+  }
+
+  const avg = getTouristAverageRating(ratings);
+  touristRatingHelp.textContent = `Overall: ${avg.toFixed(1)}/5 flys — ${getTouristAverageLabel(avg)}`;
+}
+
 function loadTouristVisits() {
   let stored;
   try {
@@ -136,16 +224,31 @@ function loadTouristVisits() {
 
   try {
     const parsed = JSON.parse(stored);
-    if (!Array.isArray(parsed) || parsed.some((visit) =>
-      !visit || typeof visit.id !== 'string' ||
-      typeof visit.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(visit.date) ||
-      dateKey(parseDateKey(visit.date)) !== visit.date ||
-      typeof visit.location !== 'string' || !visit.location.trim() ||
-      typeof visit.note !== 'string'
-    )) {
+    if (!Array.isArray(parsed) || parsed.some((visit) => {
+      if (!visit || typeof visit.id !== 'string' ||
+          typeof visit.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(visit.date) ||
+          dateKey(parseDateKey(visit.date)) !== visit.date ||
+          typeof visit.location !== 'string' || !visit.location.trim() ||
+          typeof visit.note !== 'string') {
+        return true;
+      }
+
+      if (!visit.ratings || typeof visit.ratings !== 'object') return true;
+      return touristRatingCategories.some((category) => {
+        const rating = visit.ratings[category.key] ?? 3;
+        return !Number.isInteger(rating) || rating < 1 || rating > 5;
+      });
+    })) {
       throw new TypeError('Saved Toilet Tourist visits have an unexpected format.');
     }
-    return parsed;
+
+    return parsed.map((visit) => ({
+      ...visit,
+      ratings: touristRatingCategories.reduce((accumulator, category) => {
+        accumulator[category.key] = getTouristRatingFromValue(visit.ratings?.[category.key] ?? 3);
+        return accumulator;
+      }, {})
+    }));
   } catch {
     touristStorageAvailable = false;
     window.setTimeout(() => showToast('Saved Toilet Tourist visits could not be read. They have not been changed.'), 0);
@@ -402,6 +505,36 @@ function renderTouristVisits() {
     location.textContent = visit.location;
     card.append(date, location);
 
+    const average = getTouristAverageRating(visit.ratings || {});
+    const rating = document.createElement('div');
+    rating.className = 'tourist-visit-rating';
+    const flies = document.createElement('span');
+    flies.className = 'tourist-rating-stars';
+    flies.setAttribute('aria-label', `${average} out of 5 flys`);
+    const flyCount = Math.max(0, Math.min(5, Math.round(average)));
+    for (let index = 0; index < 5; index += 1) {
+      const flyIcon = document.createElement('img');
+      flyIcon.src = 'assets/images/fly-doodle.jpg';
+      flyIcon.alt = '';
+      flyIcon.className = index < flyCount ? 'tourist-fly-icon is-active' : 'tourist-fly-icon';
+      flyIcon.setAttribute('aria-hidden', 'true');
+      flies.append(flyIcon);
+    }
+    const label = document.createElement('span');
+    label.textContent = `${average.toFixed(1)}/5 flys · ${getTouristAverageLabel(average)}`;
+    rating.append(flies, label);
+    card.append(rating);
+
+    const categoryList = document.createElement('ul');
+    categoryList.className = 'tourist-visit-category-list';
+    for (const category of touristRatingCategories) {
+      const item = document.createElement('li');
+      item.className = 'tourist-visit-category-item';
+      item.innerHTML = `<span>${category.label}</span><strong>${getTouristRatingFromValue(visit.ratings?.[category.key] ?? 3)}/5 flys</strong>`;
+      categoryList.append(item);
+    }
+    card.append(categoryList);
+
     if (visit.note) {
       const note = document.createElement('p');
       note.className = 'tourist-visit-note';
@@ -453,6 +586,10 @@ function openLogDialog() {
 function openTouristDialog() {
   touristForm.reset();
   touristDate.value = dateKey(new Date());
+  touristCategoryRatings.querySelectorAll('input[type="radio"]').forEach((input) => {
+    input.checked = input.value === '3';
+  });
+  updateTouristRatingHelp();
   touristDialog.showModal();
   touristLocation.focus();
 }
@@ -515,11 +652,18 @@ touristForm.addEventListener('submit', (event) => {
   touristLocation.setCustomValidity(touristLocation.value.trim() ? '' : 'Enter a bathroom location.');
   if (!touristForm.reportValidity()) return;
 
+  const ratings = touristRatingCategories.reduce((accumulator, category) => {
+    const selectedRating = touristForm.querySelector(`input[name="tourist-${category.key}"]:checked`);
+    accumulator[category.key] = getTouristRatingFromValue(selectedRating?.value ?? 3);
+    return accumulator;
+  }, {});
+
   touristVisits.push({
     id: crypto.randomUUID(),
     date: touristDate.value,
     location: touristLocation.value.trim(),
-    note: touristNote.value.trim()
+    note: touristNote.value.trim(),
+    ratings
   });
 
   touristLocation.addEventListener('input', () => touristLocation.setCustomValidity(''));
@@ -548,4 +692,5 @@ logForm.addEventListener('submit', (event) => {
   if (saved) showToast('Your log has been added.');
 });
 
+updateTouristRatingHelp();
 renderAll();

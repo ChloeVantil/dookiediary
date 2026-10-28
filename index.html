@@ -33,17 +33,17 @@
       <section class="tab-panel" id="calendar-panel" role="tabpanel" aria-labelledby="calendar-tab">
         <section class="stats-grid" aria-label="Your recent activity">
           <article class="stat-card">
-            <div class="stat-icon icon-peach" aria-hidden="true">◷</div>
+            <div class="stat-icon icon-peach" aria-hidden="true"></div>
             <div><p class="stat-label">LAST LOGGED</p><p class="stat-value" id="last-logged">—</p></div>
             <span class="stat-caption" id="last-caption">Your latest entry</span>
           </article>
           <article class="stat-card">
-            <div class="stat-icon icon-sage" aria-hidden="true">↗</div>
+            <div class="stat-icon icon-sage" aria-hidden="true"></div>
             <div><p class="stat-label">THIS WEEK</p><p class="stat-value"><span id="week-count">0</span><span class="stat-unit" id="week-unit"> logs</span></p></div>
             <span class="stat-caption">A simple weekly snapshot</span>
           </article>
           <article class="stat-card">
-            <div class="stat-icon icon-lilac" aria-hidden="true">⌁</div>
+            <div class="stat-icon icon-lilac" aria-hidden="true"></div>
             <div><p class="stat-label">YOUR RHYTHM</p><p class="stat-value" id="rhythm">Getting started</p></div>
             <span class="stat-caption" id="rhythm-caption">Averages appear over time</span>
           </article>
@@ -226,6 +226,11 @@
         <input id="tourist-location" name="location" type="text" maxlength="100" placeholder="A cafe, park, friend's house..." required>
         <label class="field-label" for="tourist-note">Add a detail <span class="optional">(optional)</span></label>
         <textarea id="tourist-note" name="note" rows="3" maxlength="240" placeholder="Anything you want to remember?"></textarea>
+        <fieldset class="tourist-rating-field">
+          <legend class="field-label">Rate this bathroom</legend>
+          <div class="tourist-category-ratings" id="tourist-category-ratings"></div>
+          <p class="tourist-rating-help" id="tourist-rating-help">Overall: 3.0/5 flys — Okay</p>
+        </fieldset>
         <div class="dialog-actions">
           <button class="cancel-button" id="tourist-cancel" type="button">Cancel</button>
           <button class="save-button" type="submit">Save visit</button>
