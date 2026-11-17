@@ -1,5 +1,7 @@
 # Poop Calendar
 
+I am hosting dookie diary on railway https://dookiediary-production.up.railway.app/ please use this url to access or my instagram profile @chloecloveris
+
 This project now includes a small Node/Express backend for user authentication and saved bathroom entries.
 
 ## Quick local start
