@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { initializeDatabase } = require('./db');
 const authRoutes = require('./routes/auth');
 const entryRoutes = require('./routes/entries');
@@ -18,6 +19,15 @@ app.get('/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/entries', entryRoutes);
+
+const frontendDirectory = path.join(__dirname, '..');
+app.use(express.static(frontendDirectory));
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'API endpoint not found.' });
+  }
+  res.sendFile(path.join(frontendDirectory, 'index.html'));
+});
 
 app.use((error, req, res, next) => {
   console.error('Unhandled error:', error);

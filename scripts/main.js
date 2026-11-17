@@ -19,7 +19,9 @@ const touristStorageKey = 'dookie-diary-toilet-tourist-visits';
 const usersStorageKey = 'dookie-diary-users';
 const currentUserKey = 'dookie-diary-current-user';
 const authTokenKey = 'dookie-diary-auth-token';
-const apiBaseUrl = 'http://localhost:3001';
+const apiBaseUrl = window.location.port === '4173'
+  ? 'http://localhost:3001'
+  : '';
 const calendarTab = document.getElementById('calendar-tab');
 const touristTab = document.getElementById('toilet-tourist-tab');
 const rhythmTab = document.getElementById('rhythm-tab');

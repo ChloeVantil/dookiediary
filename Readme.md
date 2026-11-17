@@ -21,6 +21,16 @@ If you want to start them separately:
 - npm run api
 - npm run frontend
 
+## Serve the website and API together
+
+For a normal deployed website, the Express server can serve both the frontend files and the API:
+
+1. Set `PORT` and `JWT_SECRET` in the server environment.
+2. Set `DB_PATH` to a persistent location when the hosting server provides storage.
+3. Run `npm start`.
+
+The website is available at the server's public URL, and API requests use the same origin. The frontend automatically uses `http://localhost:3001` only when opened on the local frontend server at port 4173.
+
 ## Toilet Tourist map
 
 The Toilet Tourist tab uses Leaflet and OpenStreetMap tiles to show saved visits with map pins. Click a pin and follow the place link in its popup to open directions in Google Maps; visit addresses in the list are also links. Place suggestions appear as you type, using Photon and OpenStreetMap data. Selecting a suggestion saves its coordinates with the visit; if no suggestion is selected, the browser sends the place name or address to OpenStreetMap's Nominatim service when the visit is saved. The app does not access the device's location. Older visits can be added to the map by editing and saving their place again.
