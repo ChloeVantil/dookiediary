@@ -1,0 +1,26 @@
+{
+  "name": "poop-calendar",
+  "version": "1.0.0",
+  "description": "Toilet diary app with Express auth and SQLite",
+  "main": "server/app.js",
+  "scripts": {
+    "init-db": "node server/init-db.js",
+    "api": "node server/app.js",
+    "frontend": "python3 -m http.server 4173 --directory .",
+    "dev": "nodemon server/app.js",
+    "start": "node server/app.js",
+    "app": "node scripts/run-app.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "nodemon": "^3.1.4"
+  }
+}

@@ -46,6 +46,43 @@ button { color: inherit; }
 
 .topbar { justify-content: space-between; }
 
+.auth-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border: 1px solid #edf0ea;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .7);
+}
+
+#auth-user-label {
+  color: #60705f;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.auth-button {
+  min-height: 31px;
+  padding: 0 12px;
+  border: 1px solid #e5eae1;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.auth-button.secondary {
+  border-color: #e7d9d6;
+  background: #fffaf9;
+  color: #7a5e59;
+}
+
 .brand {
   gap: 9px;
   color: var(--ink);
@@ -111,7 +148,8 @@ h1 {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  max-width: 520px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 13px;
   margin-bottom: 17px;
 }
@@ -239,11 +277,21 @@ h2 {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 4px;
+  gap: 1px;
+  margin-top: 36px;
+  padding: 1px;
+  background: #171717;
 }
 
 .weekday {
-  padding: 0 0 9px;
+  display: flex;
+  min-width: 0;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: var(--canvas);
+  border-radius: 0;
   color: #a2a79f;
   font-size: 10px;
   font-weight: 600;
@@ -254,7 +302,7 @@ h2 {
   display: grid;
   grid-column: 1 / -1;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 4px;
+  gap: 1px;
 }
 
 .day-cell {
@@ -268,8 +316,8 @@ h2 {
   gap: 4px;
   padding: 6px 2px;
   border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
+  border-radius: 8px;
+  background: #fff;
   color: #59645b;
   cursor: pointer;
   font-size: 12px;
@@ -288,7 +336,7 @@ h2 {
 .log-more { color: var(--green); font-size: 7px; line-height: 4px; }
 
 .calendar-legend {
-  gap: 17px;
+  gap: 2px;
   margin-top: 18px;
   padding-top: 14px;
   border-top: 1px solid #f0f2ed;
@@ -474,6 +522,90 @@ h3 {
 .dialog-actions { justify-content: flex-end; gap: 8px; margin-top: 21px; }
 .cancel-button { min-height: 37px; padding: 0 14px; border: 1px solid #e8ece4; border-radius: 9px; background: white; color: #758073; cursor: pointer; font-size: 11px; }
 .save-button { min-height: 37px; padding: 0 17px; }
+.auth-dialog {
+  overflow: hidden;
+  border: 1px solid #edf2ea;
+  background: linear-gradient(180deg, #fff 0%, #fbfdf8 100%);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-heading { margin-bottom: 6px; }
+
+.auth-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 18px;
+  padding: 10px 12px;
+  border: 1px solid #edf2ea;
+  border-radius: 12px;
+  background: #f7faf4;
+}
+
+.auth-badge {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 9px;
+  background: #ebe5d9;
+  color: #5a514a;
+  font-size: 12px;
+}
+
+.auth-identity p {
+  margin: 0;
+  color: #738077;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.auth-field-group { margin-top: 4px; }
+.auth-field-group .field-label { margin-top: 0; }
+
+.log-dialog input[placeholder]::placeholder { color: #a2a89f; }
+.log-dialog input[aria-invalid="true"], .log-dialog textarea[aria-invalid="true"] {
+  border-color: #c96d62;
+  box-shadow: 0 0 0 3px rgba(201, 109, 98, .08);
+}
+
+.auth-actions { margin-top: 16px; }
+.auth-error {
+  min-height: 18px;
+  margin: 12px 0 0;
+  color: #a34d42;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.auth-error[hidden] {
+  display: none;
+}
+
+.auth-mode-copy {
+  margin: 14px 0 0;
+  color: #7c867d;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.link-button {
+  width: 100%;
+  margin-top: 11px;
+  border: 0;
+  background: transparent;
+  color: var(--green-dark);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-align: center;
+}
+.link-button:hover { color: #2c4631; }
 
 .toast {
   position: fixed;
@@ -501,7 +633,7 @@ h3 {
   .brand-doodle { width: 52px; height: 52px; }
   .app-shell { width: min(100% - 30px, 560px); padding-top: 19px; }
   .intro { min-height: 128px; }
-  .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+  .stats-grid { gap: 7px; }
   .stat-card { min-height: 101px; grid-template-columns: 1fr; grid-template-rows: 27px auto 16px; gap: 3px; padding: 12px 10px 9px; }
   .stat-icon { width: 25px; height: 25px; grid-row: auto; border-radius: 8px; font-size: 15px; }
   .stat-label { font-size: 7px; letter-spacing: .75px; }
@@ -515,6 +647,9 @@ h3 {
   .empty-day { min-height: 76px; }
   .gentle-reminder { margin-top: 9px; }
   .page-footer { align-items: flex-start; gap: 7px; flex-direction: column; }
+  .auth-bar { gap: 6px; padding: 5px 8px; }
+  #auth-user-label { font-size: 10px; }
+  .auth-button { padding: 0 9px; letter-spacing: .04em; }
 }
 
 @media (max-width: 390px) {
@@ -602,7 +737,7 @@ button, input, textarea {
   border: 1.5px solid #171717;
   border-radius: 4px 12px 5px 10px;
   background: #fff;
-  box-shadow: 3px 3px 0 #171717;
+  box-shadow: none;
 }
 
 .day-panel {
@@ -830,22 +965,24 @@ button, input, textarea {
 
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 7px;
   margin: 0 0 16px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #222;
 }
 
 .tab-button {
+  flex: 1;
   min-height: 36px;
   padding: 0 14px;
-  border: 1px solid #222;
-  border-radius: 3px 8px 4px 7px;
-  background: #fff;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .7);
   color: #222;
   cursor: pointer;
   font-family: "Myfont", cursive;
   font-size: 13px;
+  text-align: center;
 }
 
 .tab-button:hover { background: #eee; }
@@ -906,6 +1043,13 @@ button, input, textarea {
 
 .tourist-visit-date { margin: 0 0 6px; color: #666; font-size: 10px; }
 .tourist-visit-location { margin: 0 0 5px; font-size: 17px; overflow-wrap: anywhere; }
+.tourist-visit-map-link,
+.leaflet-popup-content a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
 .tourist-visit-note { margin: 0; color: #444; font-size: 11px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
 .tourist-delete { top: 10px; right: 10px; }
 
@@ -915,8 +1059,8 @@ button, input, textarea {
   .tourist-panel { min-height: 400px; padding: 19px 15px; }
   .tourist-heading { flex-direction: column; }
   .tourist-add-button { align-self: stretch; }
-  .tabs { gap: 5px; }
-  .tab-button { padding: 0 10px; font-size: 12px; }
+  .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+  .tab-button { min-width: 0; padding: 0 10px; font-size: 12px; }
 }
 
 .log-dialog .stool-option input {
@@ -1071,4 +1215,373 @@ h3 { font-size: 20px; }
 @media (max-width: 390px) {
   .calendar-legend { font-size: 10px; }
   .calendar-heading h2 { font-size: 21px; }
+}
+
+.brand { font-size: 42px; }
+.eyebrow { font-size: 12px; }
+.intro-copy { font-size: 17px; }
+#auth-user-label { font-size: 13px; }
+.auth-button { font-size: 12px; }
+.stat-label { font-size: 12px; }
+.stat-value { font-size: 20px; }
+#rhythm { font-size: 17px; }
+.stat-unit { font-size: 16px; }
+.stat-caption { font-size: 14px; }
+.today-button, .weekday { font-size: 14px; }
+.day-cell { font-size: 16px; }
+.calendar-legend { font-size: 13px; }
+.day-count { font-size: 13px; }
+.empty-day { font-size: 15px; }
+.entry-time, .field-label, .dialog-date, .cancel-button { font-size: 15px; }
+.entry-note, .log-dialog input, .log-dialog textarea { font-size: 16px; }
+.add-log-button, .save-button { font-size: 15px; }
+.gentle-reminder, .page-footer { font-size: 13px; }
+.stool-option-card { font-size: 15px; }
+.stool-option-description { font-size: 14px; }
+.entry-stool-type { font-size: 13px; }
+.tab-button { font-size: 17px; }
+.tourist-description, .tourist-empty { font-size: 16px; }
+.tourist-visit-date, .tourist-visit-note { font-size: 15px; }
+.tourist-rating-label, .tourist-rating-help, .tourist-visit-rating,
+.tourist-visit-category-item { font-size: 13px; }
+.toast { font-size: 14px; }
+.auth-identity p, .auth-error, .auth-mode-copy, .link-button { font-size: 13px; }
+
+@media (max-width: 720px) {
+  .stat-card {
+    min-height: 110px;
+    grid-template-rows: 27px auto auto;
+  }
+  .stat-label { font-size: 10px; }
+  .stat-value { font-size: 19px; }
+  #rhythm { font-size: 16px; }
+  .stat-caption { font-size: 12px; }
+}
+
+@media (max-width: 390px) {
+  .calendar-legend { font-size: 12px; }
+  .calendar-heading h2 { font-size: 22px; }
+}
+
+.tourist-map-section {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #222;
+  border-radius: 4px 10px 3px 8px;
+  background: #fff;
+}
+
+.tourist-map-heading h3 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.tourist-map-heading p,
+.tourist-map-status,
+.tourist-map-attribution {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tourist-map-status {
+  margin-top: 12px;
+}
+
+#tourist-map {
+  width: 100%;
+  height: min(58vh, 500px);
+  min-height: 300px;
+  margin-top: 12px;
+  border: 1px solid #aaa;
+}
+
+#tourist-map[hidden] {
+  display: none;
+}
+
+.tourist-map-attribution {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.tourist-map-attribution a {
+  color: #333;
+}
+
+.tourist-geocode-status {
+  min-height: 1.5em;
+  margin: 5px 0 0;
+  color: #555;
+  font-size: 13px;
+}
+
+.tourist-location-field {
+  position: relative;
+}
+
+.tourist-location-suggestions {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  right: 0;
+  left: 0;
+  max-height: 190px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid #222;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 2px 2px 0 #222;
+  list-style: none;
+}
+
+.tourist-location-suggestions[hidden] {
+  display: none;
+}
+
+.tourist-location-suggestion {
+  padding: 8px 10px;
+  border-radius: 4px;
+  color: #222;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.tourist-location-suggestion:hover,
+.tourist-location-suggestion[aria-selected="true"] {
+  background: #eee;
+}
+
+.tourist-sharing-notice {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border: 1px solid #c9c4b8;
+  background: #f7f5ef;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tourist-sharing-notice[hidden] {
+  display: none;
+}
+
+.tourist-visit-author {
+  margin: 0 0 8px;
+  color: #666;
+  font-size: 13px;
+}
+
+.capture-panel {
+  min-height: 420px;
+  padding: 25px 29px;
+  border: 1.5px solid #171717;
+  border-radius: 4px 12px 5px 10px;
+  background: #fff;
+  box-shadow: 3px 3px 0 #171717;
+}
+
+.capture-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #aaa;
+}
+
+.capture-heading h2 {
+  margin: 0 0 7px;
+}
+
+.capture-heading p:not(.eyebrow) {
+  max-width: 620px;
+  margin: 0;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.capture-heading .add-log-button {
+  min-width: 200px;
+  padding: 0 12px;
+}
+
+.capture-status {
+  margin: 18px 0 0;
+  color: #555;
+  font-size: 15px;
+}
+
+.capture-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 14px;
+  padding-top: 16px;
+}
+
+.capture-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #222;
+  border-radius: 4px 10px 3px 8px;
+  background: #fff;
+  box-shadow: 2px 2px 0 #222;
+}
+
+.capture-card > img {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #f0f0ed;
+}
+
+.capture-card-details {
+  padding: 12px;
+}
+
+.capture-card-date {
+  margin: 0;
+  color: #333;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.capture-card-time,
+.capture-card-note {
+  margin: 4px 0 0;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.capture-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.photo-upload-help {
+  margin: 5px 0 12px;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.rhythm-panel {
+  min-height: 480px;
+  padding: 25px 29px;
+  border: 1.5px solid #171717;
+  border-radius: 4px 12px 5px 10px;
+  background: #fff;
+  box-shadow: 3px 3px 0 #171717;
+}
+
+.rhythm-panel .stats-grid {
+  margin-bottom: 20px;
+}
+
+.rhythm-panel .stat-card {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.rhythm-chart-card {
+  padding: 18px;
+  border: 1px solid #222;
+  border-radius: 4px 10px 3px 8px;
+  background: #fff;
+}
+
+.rhythm-chart-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.rhythm-chart-heading .eyebrow {
+  margin-bottom: 5px;
+}
+
+.rhythm-chart-heading h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.rhythm-chart-heading > p {
+  margin: 0 0 3px;
+  color: #555;
+  font-size: 14px;
+}
+
+.rhythm-chart {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.rhythm-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.rhythm-chart-gridline {
+  stroke: #e6e6e2;
+  stroke-width: 1;
+}
+
+.rhythm-chart-axis-label {
+  fill: #555;
+  font-family: "Myfont", cursive;
+  font-size: 12px;
+}
+
+.rhythm-chart-bar {
+  fill: #171717;
+}
+
+.rhythm-chart-bar.is-empty {
+  fill: #e7e7e2;
+}
+
+.rhythm-chart-data {
+  margin-top: 8px;
+  color: #333;
+  font-size: 14px;
+}
+
+.rhythm-chart-data summary {
+  width: fit-content;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rhythm-chart-data ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 4px 16px;
+  max-height: 220px;
+  overflow-y: auto;
+  margin: 10px 0 0;
+  padding-left: 20px;
+}
+
+@media (max-width: 600px) {
+  .rhythm-panel { min-height: 400px; padding: 19px 15px; }
+  .rhythm-chart-card { padding: 12px; }
+  .rhythm-chart-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .capture-panel { padding: 19px 15px; }
+  .capture-heading { flex-direction: column; }
+  .capture-heading .add-log-button { width: 100%; }
 }

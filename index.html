@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f7f7f4">
     <title>Dookie Diary</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="style.css?v=7">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
     <script src="scripts/main.js" defer></script>
   </head>
   <body>
@@ -15,6 +17,11 @@
           <img class="brand-doodle" src="assets/images/fly-doodle.jpg" alt="" aria-hidden="true">
           <span>Dookie Diary</span>
         </a>
+        <div class="auth-bar">
+          <span id="auth-user-label">Not signed in</span>
+          <button class="auth-button" id="open-auth-button" type="button">Log in</button>
+          <button class="auth-button secondary" id="logout-button" type="button" hidden>Log out</button>
+        </div>
       </header>
 
       <section class="intro" aria-labelledby="page-title">
@@ -26,29 +33,13 @@
       </section>
 
       <nav class="tabs" role="tablist" aria-label="Diary sections">
-        <button class="tab-button is-active" id="calendar-tab" type="button" role="tab" aria-selected="true" aria-controls="calendar-panel" tabindex="0">Poo Calendar</button>
+        <button class="tab-button is-active" id="calendar-tab" type="button" role="tab" aria-selected="true" aria-controls="calendar-panel" tabindex="0">Calendar</button>
         <button class="tab-button" id="toilet-tourist-tab" type="button" role="tab" aria-selected="false" aria-controls="toilet-tourist-panel" tabindex="-1">Toilet Tourist</button>
+        <button class="tab-button" id="rhythm-tab" type="button" role="tab" aria-selected="false" aria-controls="rhythm-panel" tabindex="-1">Your Rhythm</button>
+        <button class="tab-button" id="capture-tab" type="button" role="tab" aria-selected="false" aria-controls="capture-panel" tabindex="-1">Capture the moment</button>
       </nav>
 
       <section class="tab-panel" id="calendar-panel" role="tabpanel" aria-labelledby="calendar-tab">
-        <section class="stats-grid" aria-label="Your recent activity">
-          <article class="stat-card">
-            <div class="stat-icon icon-peach" aria-hidden="true"></div>
-            <div><p class="stat-label">LAST LOGGED</p><p class="stat-value" id="last-logged">—</p></div>
-            <span class="stat-caption" id="last-caption">Your latest entry</span>
-          </article>
-          <article class="stat-card">
-            <div class="stat-icon icon-sage" aria-hidden="true"></div>
-            <div><p class="stat-label">THIS WEEK</p><p class="stat-value"><span id="week-count">0</span><span class="stat-unit" id="week-unit"> logs</span></p></div>
-            <span class="stat-caption">A simple weekly snapshot</span>
-          </article>
-          <article class="stat-card">
-            <div class="stat-icon icon-lilac" aria-hidden="true"></div>
-            <div><p class="stat-label">YOUR RHYTHM</p><p class="stat-value" id="rhythm">Getting started</p></div>
-            <span class="stat-caption" id="rhythm-caption">Averages appear over time</span>
-          </article>
-        </section>
-
         <section class="calendar-card" aria-label="Poop calendar">
           <div class="calendar-main">
             <div class="calendar-heading">
@@ -74,7 +65,7 @@
             </div>
             <div class="calendar-legend">
               <span><img class="logged-marker legend-toilet" src="assets/images/toilet-doodle.jpg" alt="" aria-hidden="true">Logged</span>
-              <span><i class="legend-dot today-dot"></i>Today</span>
+              <span>Today</span>
               <span class="legend-hint">Select a day to add or view a log</span>
             </div>
           </div>
@@ -93,6 +84,43 @@
         </section>
       </section>
 
+      <section class="tab-panel rhythm-panel" id="rhythm-panel" role="tabpanel" aria-labelledby="rhythm-tab" hidden>
+        <section class="stats-grid" aria-label="Your rhythm">
+          <article class="stat-card">
+            <div class="stat-icon icon-lilac" aria-hidden="true"></div>
+            <div><p class="stat-label">YOUR RHYTHM</p><p class="stat-value" id="rhythm">Getting started</p></div>
+            <span class="stat-caption" id="rhythm-caption">Averages appear over time</span>
+          </article>
+        </section>
+        <section class="rhythm-chart-card" aria-labelledby="rhythm-chart-heading">
+          <div class="rhythm-chart-heading">
+            <div>
+              <p class="eyebrow">YOUR LOGS</p>
+              <h2 id="rhythm-chart-heading">Daily activity</h2>
+            </div>
+            <p id="rhythm-chart-summary">Your daily logs over the last 30 days.</p>
+          </div>
+          <div class="rhythm-chart" id="rhythm-chart"></div>
+          <details class="rhythm-chart-data">
+            <summary>View daily log counts</summary>
+            <ul id="rhythm-chart-data-list"></ul>
+          </details>
+        </section>
+      </section>
+
+      <section class="tab-panel capture-panel" id="capture-panel" role="tabpanel" aria-labelledby="capture-tab" hidden>
+        <div class="capture-heading">
+          <div>
+            <p class="eyebrow">PRIVATE PHOTO JOURNAL</p>
+            <h2>Capture the moment</h2>
+            <p>Add a photo to a diary log from the calendar. Your photos are stored only in this browser and are never shared with other users.</p>
+          </div>
+          <button class="add-log-button" id="capture-add-log" type="button"><span aria-hidden="true">＋</span> Add a log with a photo</button>
+        </div>
+        <p class="capture-status" id="capture-status" aria-live="polite">Loading your private photos…</p>
+        <div class="capture-gallery" id="capture-gallery" aria-live="polite"></div>
+      </section>
+
       <section class="tab-panel tourist-panel" id="toilet-tourist-panel" role="tabpanel" aria-labelledby="toilet-tourist-tab" hidden>
         <div class="tourist-heading">
           <div>
@@ -102,12 +130,22 @@
           </div>
           <button class="add-log-button tourist-add-button" id="add-tourist-log" type="button"><span aria-hidden="true">＋</span> Add a visit</button>
         </div>
+        <p class="tourist-sharing-notice">Community sharing: all Toilet Tourist visits saved to an account—including place, date, ratings, notes, and username—are visible to other signed-in users. Guest visits stay on this device and are not shared.</p>
+        <section class="tourist-map-section" aria-labelledby="tourist-map-heading">
+          <div class="tourist-map-heading">
+            <h3 id="tourist-map-heading">Visit map</h3>
+            <p id="tourist-map-description">Sign in to browse places and reviews shared by other users.</p>
+          </div>
+          <p class="tourist-map-status" id="tourist-map-status" aria-live="polite">Log a place to add it to your map.</p>
+          <div id="tourist-map" role="application" aria-label="Map of logged bathroom visits" hidden></div>
+          <p class="tourist-map-attribution">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>. Place suggestions by <a href="https://photon.komoot.io/" target="_blank" rel="noopener noreferrer">Photon</a>; place lookups by <a href="https://nominatim.org/" target="_blank" rel="noopener noreferrer">Nominatim</a>.</p>
+        </section>
         <div class="tourist-list" id="tourist-list" aria-live="polite"></div>
       </section>
 
       <footer class="page-footer">
         <span>Made for noticing, not judging <span aria-hidden="true">♡</span></span>
-        <span>Your entries are saved only on this device.</span>
+        <span id="privacy-note">Diary logs are private. Photos stay in this browser and are not shared.</span>
       </footer>
     </main>
 
@@ -125,11 +163,14 @@
         <input id="log-time" name="time" type="time" required>
         <label class="field-label" for="log-note">Anything you want to remember? <span class="optional">(optional)</span></label>
         <textarea id="log-note" name="note" rows="3" maxlength="240" placeholder="Keep it simple, or leave this blank."></textarea>
+        <label class="field-label" for="log-photo">Capture or choose a photo <span class="optional">(optional; saved only in this browser)</span></label>
+        <input id="log-photo" name="photo" type="file" accept="image/*" capture="environment">
+        <p class="photo-upload-help">Photos must be images no larger than 8 MB. They stay private on this device.</p>
         <fieldset class="stool-gallery">
           <legend class="field-label">Choose a stool type <span class="optional">(optional)</span></legend>
           <div class="stool-options">
             <label class="stool-option">
-              <input type="radio" name="stool-type" value="type-1">
+              <input type="checkbox" name="stool-type" value="type-1">
               <span class="stool-option-card">
                 <img src="assets/images/stool-type-1.jpg" alt="" loading="lazy">
                 <span class="stool-option-copy">
@@ -139,7 +180,7 @@
               </span>
             </label>
             <label class="stool-option">
-              <input type="radio" name="stool-type" value="type-2">
+              <input type="checkbox" name="stool-type" value="type-2">
               <span class="stool-option-card">
                 <img src="assets/images/stool-type-2.jpg" alt="" loading="lazy">
                 <span class="stool-option-copy">
@@ -149,7 +190,7 @@
               </span>
             </label>
             <label class="stool-option">
-              <input type="radio" name="stool-type" value="type-3">
+              <input type="checkbox" name="stool-type" value="type-3">
               <span class="stool-option-card">
                 <img src="assets/images/stool-type-3.jpg" alt="" loading="lazy">
                 <span class="stool-option-copy">
@@ -159,7 +200,7 @@
               </span>
             </label>
             <label class="stool-option">
-              <input type="radio" name="stool-type" value="type-4">
+              <input type="checkbox" name="stool-type" value="type-4">
               <span class="stool-option-card">
                 <img src="assets/images/stool-type-4.jpg" alt="" loading="lazy">
                 <span class="stool-option-copy">
@@ -169,7 +210,7 @@
               </span>
             </label>
             <label class="stool-option">
-              <input type="radio" name="stool-type" value="type-5">
+              <input type="checkbox" name="stool-type" value="type-5">
               <span class="stool-option-card">
                 <img src="assets/images/stool-type-5.jpg" alt="" loading="lazy">
                 <span class="stool-option-copy">
@@ -179,7 +220,7 @@
               </span>
             </label>
             <label class="stool-option">
-              <input type="radio" name="stool-type" value="type-6">
+              <input type="checkbox" name="stool-type" value="type-6">
               <span class="stool-option-card">
                 <img src="assets/images/stool-type-6.jpg" alt="" loading="lazy">
                 <span class="stool-option-copy">
@@ -189,7 +230,7 @@
               </span>
             </label>
             <label class="stool-option">
-              <input type="radio" name="stool-type" value="type-7">
+              <input type="checkbox" name="stool-type" value="type-7">
               <span class="stool-option-card">
                 <img src="assets/images/stool-type-7.jpg" alt="" loading="lazy">
                 <span class="stool-option-copy">
@@ -199,7 +240,7 @@
               </span>
             </label>
             <label class="stool-option stool-option-none">
-              <input type="radio" name="stool-type" value="none">
+              <input type="checkbox" name="stool-type" value="none">
               <span class="stool-option-card">Skip type</span>
             </label>
           </div>
@@ -219,11 +260,15 @@
           </div>
           <button class="dialog-close" id="tourist-dialog-close" type="button" aria-label="Close">×</button>
         </div>
-        <p class="dialog-date">A manual travel note—no location tracking.</p>
+        <p class="dialog-date">No device tracking. Place names you type are sent to Photon for suggestions. If you don't select a suggestion, the place name is looked up when you save.</p>
         <label class="field-label" for="tourist-date">When did you visit?</label>
         <input id="tourist-date" name="date" type="date" required>
         <label class="field-label" for="tourist-location">Where was the bathroom?</label>
-        <input id="tourist-location" name="location" type="text" maxlength="100" placeholder="A cafe, park, friend's house..." required>
+        <div class="tourist-location-field">
+          <input id="tourist-location" name="location" type="text" maxlength="100" placeholder="A cafe, park, friend's house, or street address..." autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="tourist-location-suggestions" aria-expanded="false" required>
+          <ul class="tourist-location-suggestions" id="tourist-location-suggestions" role="listbox" aria-label="Suggested places" hidden></ul>
+        </div>
+        <p class="tourist-geocode-status" id="tourist-geocode-status" aria-live="polite"></p>
         <label class="field-label" for="tourist-note">Add a detail <span class="optional">(optional)</span></label>
         <textarea id="tourist-note" name="note" rows="3" maxlength="240" placeholder="Anything you want to remember?"></textarea>
         <fieldset class="tourist-rating-field">
@@ -235,6 +280,43 @@
           <button class="cancel-button" id="tourist-cancel" type="button">Cancel</button>
           <button class="save-button" type="submit">Save visit</button>
         </div>
+      </form>
+    </dialog>
+    <dialog class="log-dialog auth-dialog" id="auth-dialog" aria-labelledby="auth-dialog-title">
+      <form id="auth-form" class="auth-form" novalidate>
+        <div class="dialog-heading auth-heading">
+          <div>
+            <p class="eyebrow">ACCOUNT</p>
+            <h2 id="auth-dialog-title">Log in</h2>
+          </div>
+          <button class="dialog-close" id="auth-dialog-close" type="button" aria-label="Close">×</button>
+        </div>
+
+        <div class="auth-identity" aria-hidden="true">
+          <div class="auth-badge">✦</div>
+          <p>Keep your gut journal private and personal.</p>
+        </div>
+
+        <div class="auth-field-group">
+          <label class="field-label" for="auth-username">Username</label>
+          <input id="auth-username" name="username" type="text" maxlength="32" autocomplete="username" placeholder="choose a username" required>
+        </div>
+
+        <div class="auth-field-group">
+          <label class="field-label" for="auth-password">Password</label>
+          <input id="auth-password" name="password" type="password" minlength="8" maxlength="64" autocomplete="current-password" placeholder="at least 8 characters" required>
+        </div>
+
+        <p class="auth-error" id="auth-error" aria-live="polite"></p>
+
+        <p class="auth-mode-copy" id="auth-mode-copy">Need an account? Create one below.</p>
+
+        <div class="dialog-actions auth-actions">
+          <button class="cancel-button" id="auth-cancel" type="button">Cancel</button>
+          <button class="save-button" id="auth-submit" type="submit">Log in</button>
+        </div>
+
+        <button class="link-button" id="toggle-auth-mode" type="button">Create account</button>
       </form>
     </dialog>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
